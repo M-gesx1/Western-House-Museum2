@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة اختبار المعلومات عن المتحف</title>
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1542224561-3a7f006b46a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Cairo', sans-serif;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s;
+        }
+        h1 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .question {
+            margin: 20px;
+            font-size: 1.5em;
+            color: #dcdcdc;
+            transition: transform 0.5s;
+        }
+        button {
+            margin: 10px;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        .feedback {
+            font-size: 1.2em;
+            margin: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .result {
+            font-size: 1.5em;
+            margin-top: 30px;
+            color: #ffeb3b;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>لعبة اختبار المعلومات عن المتحف</h1>
+    <div class="question" id="question"></div>
+    <div id="buttons"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="result" id="result"></div>
+    
+    <script>
+        const questions = [
+            {
+                question: "ما هو اسم المتحف؟",
+                answers: ["المتحف الوطني", "متحف البيت الغربي", "متحف عمان", "متحف التاريخ"],
+                correct: 1
+            },
+            {
+                question: "من هي صاحبة المتحف؟",
+                answers: ["فاطمة", "زكية بنت ناصر", "عائشة", "أمينة"],
+                correct: 1
+            },
+            {
+                question: "كم عدد الغرف في المتحف؟",
+                answers: ["10", "12", "14", "16"],
+                correct: 2
+            },
+            {
+                question: "في أي ولاية يقع المتحف؟",
+                answers: ["مسقط", "الرستاق", "صحار", "نزوى"],
+                correct: 1
+            },
+            {
+                question: "ما هي إحدى الجوائز التي حصل عليها المتحف؟",
+                answers: ["جائزة السلطان قابوس للعمل التطوعي", "جائزة أفضل متحف", "جائزة السياحة", "جائزة التراث"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        const questionEl = document.getElementById('question');
+        const buttonsEl = document.getElementById('buttons');
+        const feedbackEl = document.getElementById('feedback');
+        const resultEl = document.getElementById('result');
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            questionEl.textContent = q.question;
+            buttonsEl.innerHTML = '';
+
+            q.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.textContent = answer;
+                button.onclick = () => checkAnswer(index);
+                buttonsEl.appendChild(button);
+            });
+        }
+
+        function checkAnswer(index) {
+            const q = questions[currentQuestion];
+            if (index === q.correct) {
+                feedbackEl.textContent = "إجابة صحيحة!";
+                score++;
+            } else {
+                feedbackEl.textContent = "إجابة خاطئة!";
+            }
+            feedbackEl.style.opacity = 1;
+            setTimeout(() => {
+                feedbackEl.style.opacity = 0;
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 2000);
+        }
+
+        function showResult() {
+            questionEl.textContent = "انتهت اللعبة!";
+            buttonsEl.innerHTML = '';
+            resultEl.textContent = `لقد حصلت على ${score} من ${questions.length} إجابات صحيحة!`;
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
